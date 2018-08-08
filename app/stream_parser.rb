@@ -1,3 +1,5 @@
+require './app/word_counter'
+
 class StreamParser < Struct.new(:stream)
   WORD_REGEXP = /\w+/
 
@@ -50,7 +52,7 @@ class StreamParser < Struct.new(:stream)
   end
 
   def count_word(word)
-    @word_counter.count(word)
+    @word_counter.add(word)
     @total_word_count += 1
   end
 end

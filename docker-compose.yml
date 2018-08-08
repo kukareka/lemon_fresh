@@ -1,0 +1,8 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:alpine
+    ports:
+      - 18086:8086
+    environment:
+      INFLUXDB_DB: word_count
