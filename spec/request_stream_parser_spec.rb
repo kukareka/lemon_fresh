@@ -6,44 +6,36 @@ describe RequestStreamParser do
     let(:word_counter) { double('WordCounter') }
     let(:stream_parser) { described_class.new(stream: stream, word_counter: word_counter, buffer_size: buffer_size) }
 
-    shared_examples_for 'stream parser' do |total_word_count:|
+    shared_examples_for 'request stream parser' do |total_word_count:|
       context 'with a small buffer' do
         let(:buffer_size) { 3 }
 
-        it { is_expected.to eq(total_word_count) }
+        it_behaves_like 'stream parser', total_word_count: total_word_count
       end
 
       context 'with a large buffer' do
         let(:buffer_size) { 1024 }
 
-        it { is_expected.to eq(total_word_count) }
+        it_behaves_like 'stream parser', total_word_count: total_word_count
       end
     end
-
-    before do
-      input.split(/\W+/).group_by(&:itself).each do |word, occurrences|
-        expect(word_counter).to receive(:add).with(word).exactly(occurrences.count).times if word.length > 0
-      end
-    end
-
-    subject { stream_parser.parse! }
 
     context 'a short string' do
       let(:input) { 'all people seem to need data procession' }
 
-      it_behaves_like 'stream parser', total_word_count: 7
+      it_behaves_like 'request stream parser', total_word_count: 7
     end
 
     context 'a string with special characters' do
       let(:input) { 'Hi! My name is (what?), my name is (who?), my name is Slim Shady' }
 
-      it_behaves_like 'stream parser', total_word_count: 14
+      it_behaves_like 'request stream parser', total_word_count: 14
     end
 
     context 'an empty string' do
       let(:input) { '' }
 
-      it_behaves_like 'stream parser', total_word_count: 0
+      it_behaves_like 'request stream parser', total_word_count: 0
     end
 
     context 'a very long string' do
@@ -54,7 +46,7 @@ describe RequestStreamParser do
         in 2004.
       INPUT
 
-      it_behaves_like 'stream parser', total_word_count: 5_300
+      it_behaves_like 'request stream parser', total_word_count: 5_300
     end
   end
 end

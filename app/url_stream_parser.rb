@@ -18,7 +18,8 @@ class UrlStreamParser < AbstractStreamParser
                     verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
       request = Net::HTTP::Get.new uri
 
-      http.request request do |response|
+      # Reading stream in chunks, not loading the whole response into memory
+      http.request(request) do |response|
         response.read_body { |chunk| yield chunk }
       end
     end
