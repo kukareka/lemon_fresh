@@ -1,10 +1,10 @@
-require './app/stream_parser'
+require './app/request_stream_parser'
 
-describe StreamParser do
+describe RequestStreamParser do
   describe '#parse!' do
     let(:stream) { StringIO.new(input) }
     let(:word_counter) { double('WordCounter') }
-    let(:stream_parser) { described_class.new(stream, word_counter: word_counter, buffer_size: buffer_size) }
+    let(:stream_parser) { described_class.new(stream: stream, word_counter: word_counter, buffer_size: buffer_size) }
 
     shared_examples_for 'stream parser' do |total_word_count:|
       context 'with a small buffer' do
@@ -22,7 +22,7 @@ describe StreamParser do
 
     before do
       input.split(/\W+/).group_by(&:itself).each do |word, occurrences|
-        expect(word_counter).to receive(:count).with(word).exactly(occurrences.count).times if word.length > 0
+        expect(word_counter).to receive(:add).with(word).exactly(occurrences.count).times if word.length > 0
       end
     end
 

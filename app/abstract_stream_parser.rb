@@ -1,19 +1,18 @@
 require './app/word_counter'
 
-class StreamParser < Struct.new(:stream)
+class AbstractStreamParser
   WORD_REGEXP = /\w+/
 
-  def initialize(stream, word_counter: WordCounter.new, buffer_size: (ENV['BUFFER_SIZE'] || 16_384).to_i)
+  def initialize(stream:, word_counter: WordCounter.new)
     @stream = stream
     @word_counter = word_counter
-    @buffer_size = buffer_size
     @total_word_count = 0
   end
 
   def parse!
     @last_word = ''
 
-    @stream.each(@buffer_size) do |chunk|
+    with_each_chunk do |chunk|
       with_each_word(chunk) do |word|
         count_word(word)
       end
@@ -25,6 +24,8 @@ class StreamParser < Struct.new(:stream)
   end
 
   private
+
+  attr_reader :stream
 
   def with_each_word(chunk)
     chunk_pos = 0

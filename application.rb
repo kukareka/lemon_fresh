@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'stringio'
 
-require './app/stream_parser'
+require './app/request_stream_parser'
 
 # Borrowed from https://stackoverflow.com/a/3028194/4731705
 use Rack::Config do |env|
@@ -11,9 +11,9 @@ use Rack::Config do |env|
 end
 
 put '/' do
-  StreamParser.new(request.env['data.input']).parse!
+  RequestStreamParser.new(stream: request.env['data.input']).parse!
 end
 
 get '/' do
-  'Thank you.'
+  WordCounter.new.count(params[:word]).to_s
 end
