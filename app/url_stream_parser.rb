@@ -12,6 +12,7 @@ class UrlStreamParser < AbstractStreamParser
   def with_each_chunk
     uri = URI(@url)
 
+    # Skip SSL verification to simplify testing with self-signed certificates
     Net::HTTP.start(uri.host, uri.port,
                     use_ssl: uri.scheme == 'https',
                     verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|

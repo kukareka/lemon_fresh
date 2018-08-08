@@ -11,6 +11,7 @@ use Rack::Config do |env|
   end
 end
 
+# Using PUT because it modifies the state. GET endpoints should not have side effects.
 put '/' do
   RequestStreamParser.new(stream: request.env['data.input']).parse!
 end
