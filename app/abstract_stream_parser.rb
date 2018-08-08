@@ -3,8 +3,7 @@ require './app/word_counter'
 class AbstractStreamParser
   WORD_REGEXP = /\w+/
 
-  def initialize(stream:, word_counter: WordCounter.new)
-    @stream = stream
+  def initialize(word_counter: WordCounter.new)
     @word_counter = word_counter
     @total_word_count = 0
   end
@@ -24,8 +23,6 @@ class AbstractStreamParser
   end
 
   private
-
-  attr_reader :stream
 
   def with_each_word(chunk)
     chunk_pos = 0

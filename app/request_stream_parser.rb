@@ -1,9 +1,10 @@
 require './app/abstract_stream_parser'
 
 class RequestStreamParser < AbstractStreamParser
-  def initialize(buffer_size: (ENV['BUFFER_SIZE'] || 16_384).to_i, **args)
+  def initialize(stream:, buffer_size: (ENV['BUFFER_SIZE'] || 16_384).to_i, **args)
     super(args)
 
+    @stream = stream
     @buffer_size = buffer_size
   end
 
