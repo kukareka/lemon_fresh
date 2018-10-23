@@ -1,0 +1,16 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:alpine
+    environment:
+      INFLUXDB_DB: word_count
+  web:
+    build: .
+    command: ruby application.rb -p 3000
+    ports:
+      - 8788:3000
+    environment:
+      INFLUX_HOST: influxdb
+      RACK_ENV: production
+    depends_on:
+      - influxdb
